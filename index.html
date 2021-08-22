@@ -1,12 +1,134 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Page Title</title>
-</head>
-<body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<h1>Phani</h1>
-<p>This is a paragraph.</p>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-</body>
+    <title>Debt Tracking</title>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <h3>Debt Tracking</h3>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col" class="text-center">Principle</th>
+                    <th scope="col" class="text-center">Date</th>
+                    <th scope="col" class="text-center">Interest %</th>
+                    <th scope="col" class="text-center">Amount Due</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+
+        function calculate(startDate, principle, interest1) {
+
+            //var d2 = new Date(Date.parse($('#r1c2').val()));                
+            var d1 = new Date();  
+            var d2 = new Date(Date.parse(startDate));  
+
+            dy = d1.getYear()  - d2.getYear();
+            dm = d1.getMonth() - d2.getMonth();
+            dd = d1.getDate()  - d2.getDate();
+
+            if (dd < 0) { dm -= 1; dd += 30; }
+            if (dm < 0) { dy -= 1; dm += 12; }
+
+            console.log(dy, "Year(s),", dm, "Month(s), and", dd, "Days.");
+            
+            var pp = principle
+            var interest = interest1;
+
+            console.log("Principle :: "+pp)
+            for(let j=0; j < dy; j++){
+                pp = Math.ceil(pp + (pp*interest*12));
+                console.log("Principle after year :: "+(j+1)+" :: "+pp)
+            }
+
+            if(dm > 0){
+                pp = Math.ceil(pp + (pp*interest*dm));
+            }
+
+            if(dd > 0){
+                pp = pp + Math.ceil((((pp*interest)/31)*dd));
+            }
+
+            return pp;
+        }
+
+        function formatINR(number){
+            var x=number.toString();
+            var lastThree = x.substring(x.length-3);
+            var otherNumbers = x.substring(0,x.length-3);
+            if(otherNumbers != '')
+                lastThree = ',' + lastThree;
+            var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+            return res;
+        }
+        
+        $(function() {
+
+            var markup = '';
+            var totalDue = 0;
+
+            data.phani.forEach(function(currentValue, index, arr){
+                
+                var amountDue = calculate(currentValue.date, currentValue.principle, currentValue.interest);
+                totalDue += amountDue;
+                markup += '<tr><th scope="col" class="text-center">'+(index+1)+'</th>';
+                markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(currentValue.principle)+'</td>';
+                markup += '<td scope="col" class="text-center">'+currentValue.date+'</td>';
+                markup += '<td scope="col" class="text-center">'+(currentValue.interest*100)+'</td>';
+                markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(amountDue)+'</td></tr>';
+            });
+
+            markup += '<td colspan="4" class="text-right">Total</td><td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(totalDue)+'</td>';
+
+            $("table tbody").append(markup);
+
+        });
+        
+        var data = {
+            "phani":[
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
+                {"principle":211000, "date":"2015-08-19", "interest":"0.015"},
+                {"principle":140000, "date":"2016-02-02", "interest":"0.015"},
+                {"principle":221000, "date":"2016-10-05", "interest":"0.015"},
+                {"principle":115000, "date":"2016-12-17", "interest":"0.015"},
+                {"principle":50000, "date":"2017-03-31", "interest":"0.015"},
+                {"principle":200000, "date":"2017-07-02", "interest":"0.020"},
+                {"principle":125000, "date":"2017-10-21", "interest":"0.015"},
+                {"principle":250000, "date":"2017-11-23", "interest":"0.020"},
+                {"principle":50000, "date":"2018-02-26", "interest":"0.015"},
+                {"principle":90000, "date":"2018-10-24", "interest":"0.015"},
+                {"principle":70000, "date":"2019-03-31", "interest":"0.015"},
+                {"principle":350000, "date":"2019-03-31", "interest":"0.015"},
+                {"principle":47000, "date":"2019-04-25", "interest":"0.015"},
+                {"principle":100000, "date":"2019-06-11", "interest":"0.020"},
+                {"principle":100000, "date":"2019-11-05", "interest":"0.015"}
+            ],
+            "rohit":[
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015"}
+            ]
+        };
+
+    </script>
+  </body>
 </html>
