@@ -20,6 +20,8 @@
                     <th scope="col" class="text-center">#</th>
                     <th scope="col" class="text-center">Principle</th>
                     <th scope="col" class="text-center">Date</th>
+					<th scope="col" class="text-center">From</th>
+					<th scope="col" class="text-center">Purpose</th>
                     <th scope="col" class="text-center">Interest %</th>
                     <th scope="col" class="text-center">Amount Due</th>
                 </tr>
@@ -89,12 +91,16 @@
             data.phani.forEach(function(currentValue, index, arr){
                 
                 var amountDue = calculate(currentValue.date, currentValue.principle, currentValue.interest);
-                totalDue += amountDue;
-                markup += '<tr><th scope="col" class="text-center">'+(index+1)+'</th>';
-                markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(currentValue.principle)+'</td>';
-                markup += '<td scope="col" class="text-center">'+currentValue.date+'</td>';
-                markup += '<td scope="col" class="text-center">'+(currentValue.interest*100)+'</td>';
-                markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(amountDue)+'</td></tr>';
+				if(!currentValue.paid){
+					totalDue += amountDue;
+					markup += '<tr><th scope="col" class="text-center">'+(index+1)+'</th>';
+					markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(currentValue.principle)+'</td>';
+					markup += '<td scope="col" class="text-center">'+currentValue.date+'</td>';
+					markup += '<td scope="col" class="text-center">'+currentValue.from+'</td>';
+					markup += '<td scope="col" class="text-center">'+currentValue.description+'</td>';
+					markup += '<td scope="col" class="text-center">'+(currentValue.interest*100)+'</td>';
+					markup += '<td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(amountDue)+'</td></tr>';
+				}
             });
 
             markup += '<td colspan="4" class="text-right">Total</td><td scope="col" class="text-center">'+String.fromCharCode(8377)+" "+formatINR(totalDue)+'</td>';
@@ -105,26 +111,28 @@
         
         var data = {
             "phani":[
-                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
-                {"principle":211000, "date":"2015-08-19", "interest":"0.015"},
-                {"principle":140000, "date":"2016-02-02", "interest":"0.015"},
-                {"principle":221000, "date":"2016-10-05", "interest":"0.015"},
-                {"principle":115000, "date":"2016-12-17", "interest":"0.015"},
-                {"principle":50000, "date":"2017-03-31", "interest":"0.015"},
-                {"principle":200000, "date":"2017-07-02", "interest":"0.020"},
-                {"principle":125000, "date":"2017-10-21", "interest":"0.015"},
-                {"principle":250000, "date":"2017-11-23", "interest":"0.020"},
-                {"principle":50000, "date":"2018-02-26", "interest":"0.015"},
-                {"principle":90000, "date":"2018-10-24", "interest":"0.015"},
-                {"principle":70000, "date":"2019-03-31", "interest":"0.015"},
-                {"principle":350000, "date":"2019-03-31", "interest":"0.015"},
-                {"principle":47000, "date":"2019-04-25", "interest":"0.015"},
-                {"principle":100000, "date":"2019-06-11", "interest":"0.020"},
-                {"principle":100000, "date":"2019-11-05", "interest":"0.015"}
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015", "from":"Krishna Murthy", "description":"Visa processing", "paid":false},
+				{"principle":200000, "date":"2015-07-01", "interest":"0", "from":"Ramakrisha", "description":"US expences", "paid":false},
+                {"principle":211000, "date":"2015-08-19", "interest":"0.015", "from":"B. Ravi Kumar", "description":"Tution 1st Semester", "paid":false},
+                {"principle":140000, "date":"2016-02-02", "interest":"0.015", "from":"B. Ravi Kumar", "description":"Tution 2nd Semester", "paid":false},
+                {"principle":221000, "date":"2016-10-05", "interest":"0.015", "from":"Jandu", "description":"Tution 3rd Semester", "paid":false},
+                {"principle":115000, "date":"2016-12-17", "interest":"0.015", "from":"Krishna Murthy", "description":"Tution 4rd Semester", "paid":false},
+                {"principle":50000, "date":"2017-03-31", "interest":"0.015", "from":"Jandu", "description":"Education Loan", "paid":false},
+                {"principle":200000, "date":"2017-07-02", "interest":"0.020", "from":"Jandu", "description":"Tution 5th Semester", "paid":false},
+                {"principle":125000, "date":"2017-10-21", "interest":"0.015", "from":"Jandu", "description":"Credit card payment", "paid":false},
+                {"principle":239000, "date":"2017-11-23", "interest":"0.020", "from":"Jandu", "description":"Tution 5th Semester", "paid":false},
+				{"principle":225000, "date":"2017-12-12", "interest":"0", "from":"Ramakrisha", "description":"Tution 6th Semester", "paid":false},
+                {"principle":50000, "date":"2018-02-26", "interest":"0.015", "from":"Jandu", "description":"Credit card payment", "paid":false},
+                {"principle":90000, "date":"2018-10-24", "interest":"0.015", "from":"Jandu", "description":"Payments", "paid":false},
+                {"principle":70000, "date":"2019-03-31", "interest":"0.020", "from":"Anand", "description":"Education Loan", "paid":true, "date1":"2019-07-20"},
+                {"principle":350000, "date":"2019-03-31", "interest":"0.015", "from":"B. Ravi Kumar", "description":"US expences", "paid":false},
+                {"principle":47000, "date":"2019-04-25", "interest":"0.015", "from":"Madhusudan", "description":"Education Loan", "paid":true, "date1":"2020-04-15"},
+                {"principle":100000, "date":"2019-06-11", "interest":"0.020", "from":"Jandu", "description":"US expences", "paid":false},
+                {"principle":100000, "date":"2019-11-05", "interest":"0.015", "from":"Jandu", "description":"US expences", "paid":false}
             ],
             "rohit":[
-                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
-                {"principle":100000, "date":"2015-05-01", "interest":"0.015"},
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015", "from":""},
+                {"principle":100000, "date":"2015-05-01", "interest":"0.015", "from":""},
                 {"principle":100000, "date":"2015-05-01", "interest":"0.015"}
             ]
         };
